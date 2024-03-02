@@ -587,7 +587,7 @@ local int updatewindow(z_streamp strm, const Bytef *end, unsigned copy) {
    will return Z_BUF_ERROR if it has not reached the end of the stream.
  */
 
-int ZEXPORT inflate(z_streamp strm, int flush) {
+int __cdecl inflate(z_streamp strm, int flush) {
     struct inflate_state FAR *state;
     z_const unsigned char FAR *next;    /* next input */
     unsigned char FAR *put;     /* next output */
@@ -1263,7 +1263,7 @@ int ZEXPORT inflate(z_streamp strm, int flush) {
     return ret;
 }
 
-int ZEXPORT inflateEnd(z_streamp strm) {
+int __cdecl inflateEnd(z_streamp strm) {
     struct inflate_state FAR *state;
     if (inflateStateCheck(strm))
         return Z_STREAM_ERROR;

@@ -398,7 +398,7 @@ ZEXTERN int ZEXPORT inflateInit(z_streamp strm);
 */
 
 
-ZEXTERN int ZEXPORT inflate(z_streamp strm, int flush);
+ZEXTERN int __cdecl inflate(z_streamp strm, int flush);
 /*
     inflate decompresses as much data as possible, and stops when the input
   buffer becomes empty or the output buffer becomes full.  It may introduce
@@ -518,7 +518,7 @@ ZEXTERN int ZEXPORT inflate(z_streamp strm, int flush);
 */
 
 
-ZEXTERN int ZEXPORT inflateEnd(z_streamp strm);
+ZEXTERN int __cdecl inflateEnd(z_streamp strm);
 /*
      All dynamically allocated data structures for this stream are freed.
    This function discards any unprocessed input and does not flush any pending
