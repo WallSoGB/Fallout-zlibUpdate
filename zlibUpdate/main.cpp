@@ -27,7 +27,7 @@ bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info)
 {
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "zlib";
-	info->version = 1.3;
+	info->version = 131;
 
 	return true;
 }
