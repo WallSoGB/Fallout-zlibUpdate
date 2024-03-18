@@ -48,6 +48,20 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 
 		for (UInt32 uiAddr : { 0xAFC00E, 0xAFC21B, 0xAFC552 })
 			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::CompressedArchiveFile, CompressedArchiveFile::StandardReadF
+	else {
+		ReplaceCall(0x4DFB34, inflateInit_Ex); // TESFile::DecompressCurrentForm
+		ReplaceCall(0x8AAF17, inflateInit_Ex); // CompressedArchiveFile::CompressedArchiveFile
+
+		// Inflate
+		ReplaceCall(0x4DFB9E, inflate); // TESFile::DecompressCurrentForm
+		ReplaceCall(0x8AABD4, inflate); // CompressedArchiveFile::CompressedArchiveFile
+
+		// End
+		for (UInt32 uiAddr : { 0x4DFB45, 0x4DFC1F, 0x4DFBD5, 0x4DFBC4 })
+			ReplaceCall(uiAddr, inflateEnd); // TESFile::DecompressCurrentForm
+
+		for (UInt32 uiAddr : { 0x8AA9EE, 0x8AABFB, 0x8AAF32 })
+			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::CompressedArchiveFile, CompressedArchiveFile::StandardReadF
 	}
 
 	return true;
