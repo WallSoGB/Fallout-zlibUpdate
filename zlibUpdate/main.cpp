@@ -13,6 +13,13 @@ static void SafeWrite32(UInt32 addr, UInt32 data) {
 	VirtualProtect((void*)addr, 4, oldProtect, &oldProtect);
 }
 
+void SafeWrite16(UInt32 addr, UInt32 data) {
+	UInt32	oldProtect;
+
+	VirtualProtect((void*)addr, 4, PAGE_EXECUTE_READWRITE, &oldProtect);
+	*((UInt16*)addr) = data;
+	VirtualProtect((void*)addr, 4, oldProtect, &oldProtect);
+}
 template <typename T>
 DECLSPEC_NOINLINE void ReplaceCall(UInt32 jumpSrc, T jumpTgt)
 {
@@ -34,6 +41,9 @@ bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info)
 
 bool NVSEPlugin_Load(NVSEInterface* nvse)
 {
+
+constexpr UInt32 zLibAllocSize = 0x1C08;
+
 	if (!nvse->isEditor) {
 		ReplaceCall(0x4742AC, inflateInit_Ex); // TESFile::DecompressCurrentForm
 		ReplaceCall(0xAFC537, inflateInit_Ex); // CompressedArchiveFile::CompressedArchiveFile
@@ -48,6 +58,9 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 
 		for (UInt32 uiAddr : { 0xAFC00E, 0xAFC21B, 0xAFC552 })
 			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::CompressedArchiveFile, CompressedArchiveFile::StandardReadF
+
+		SafeWrite16(0xAFC4A2, zLibAllocSize);	// Increase allocation size
+	}
 	else {
 		ReplaceCall(0x4DFB34, inflateInit_Ex); // TESFile::DecompressCurrentForm
 		ReplaceCall(0x8AAF17, inflateInit_Ex); // CompressedArchiveFile::CompressedArchiveFile
@@ -61,7 +74,9 @@ bool NVSEPlugin_Load(NVSEInterface* nvse)
 			ReplaceCall(uiAddr, inflateEnd); // TESFile::DecompressCurrentForm
 
 		for (UInt32 uiAddr : { 0x8AA9EE, 0x8AABFB, 0x8AAF32 })
-			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::CompressedArchiveFile, CompressedArchiveFile::StandardReadF
+			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::~CompressedArchiveFile, CompressedArchiveFile::StandardReadF
+
+		SafeWrite16(0x8AAE81, zLibAllocSize); // Increase allocation size
 	}
 
 	return true;
