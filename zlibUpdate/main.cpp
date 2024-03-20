@@ -79,7 +79,7 @@ EXTERN_DLL_EXPORT bool FOSEPlugin_Load(FOSEInterface* nvse) {
 		for (UInt32 uiAddr : { 0xBCA0F2, 0xBCA264, 0xBCBE9B })
 			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::~CompressedArchiveFile, CompressedArchiveFile::StandardReadF
 
-		SafeWrite16(0xBCBE33, zLibAllocSize);	// Increase allocation size
+		SafeWrite16(0xBCBE34, zLibAllocSize);	// Increase allocation size
 	}
 	else {
 		ReplaceCall(0x4E32D8, inflateInit_Ex); // TESFile::DecompressCurrentForm
@@ -96,7 +96,7 @@ EXTERN_DLL_EXPORT bool FOSEPlugin_Load(FOSEInterface* nvse) {
 		for (UInt32 uiAddr : { 0xB52D82, 0xB52EF4, 0xB552EB })
 			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::~CompressedArchiveFile, CompressedArchiveFile::StandardReadF
 
-		SafeWrite16(0xB55283, zLibAllocSize); // Increase allocation size
+		SafeWrite16(0xB55284, zLibAllocSize); // Increase allocation size
 
 		// GECK Exclusive
 		// Remove record compression
@@ -150,7 +150,7 @@ EXTERN_DLL_EXPORT bool NVSEPlugin_Load(NVSEInterface* nvse) {
 		for (UInt32 uiAddr : { 0x8AA9EE, 0x8AABFB, 0x8AAF32 })
 			ReplaceCall(uiAddr, inflateEnd); // CompressedArchiveFile::~CompressedArchiveFile, CompressedArchiveFile::StandardReadF
 
-		SafeWrite16(0x8AAE81, zLibAllocSize); // Increase allocation size
+		SafeWrite16(0x8AAE82, zLibAllocSize); // Increase allocation size
 	}
 
 	return true;
